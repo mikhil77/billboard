@@ -1,3 +1,3 @@
-# billboard REST API
+# billboard
 
-REST API providing basic functionality for adding billboard
+ Providing basic functionality for adding billboard
