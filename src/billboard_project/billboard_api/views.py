@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.exceptions import ParseError
+from rest_framework.parsers import FileUploadParser
 from rest_framework import status
 from . import models
 from . import serializers
@@ -9,6 +11,7 @@ class UserProfileView(APIView):
 
     serializer_class = serializers.UserProfileSerializer
     queryset = models.UserProfile.objects.all()
+    parser_class = (FileUploadParser,)
 
     def get(self, request, format=None):
         """Returns a list of APIView features"""
@@ -27,16 +30,23 @@ class UserProfileView(APIView):
 
         serializer = serializers.UserProfileSerializer(data=request.data)
 
+
+
         if serializer.is_valid():
             name = serializer.data.get('name')
             size = serializer.data.get('size')
             photo = serializer.data.get('photo')
+
             availabilty = serializer.data.get('availabilty')
-            message = 'Hello {0}'.format(name,size,photo,availabilty)
-            return Response({'name':name, 'size':size, 'photo':photo,'availabilty':availabilty})
+
+
+
+            return Response({'name':name, 'size':size, 'photo':'1553096441-1b45ebcdd1c8.jpg','availabilty':availabilty})
         else:
             return Response(
                 serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
     def perform_create(self, serializer):
         """Sets the user profile to the logged in user."""

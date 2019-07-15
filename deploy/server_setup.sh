@@ -3,9 +3,9 @@
 set -e
 
 # TODO: Set to URL of git repo.
-PROJECT_GIT_URL='https://github.com/mikhil77/profiles-rest-api.git'
+PROJECT_GIT_URL='https://github.com/mikhil77/billboard.git'
 
-PROJECT_BASE_PATH='/usr/local/apps/profiles-rest-api'
+PROJECT_BASE_PATH='/usr/local/apps/'
 
 echo "Installing dependencies..."
 apt-get update
@@ -21,7 +21,7 @@ python3 -m venv $PROJECT_BASE_PATH/env
 
 # Install python packages
 $PROJECT_BASE_PATH/env/bin/pip install -r $PROJECT_BASE_PATH/requirements.txt
-$PROJECT_BASE_PATH/env/bin/pip install uwsgi==2.0.18
+$PROJECT_BASE_PATH/env/bin/pip install uwsgi==2.0.15
 
 # Run migrations and collectstatic
 cd $PROJECT_BASE_PATH
@@ -29,15 +29,15 @@ $PROJECT_BASE_PATH/env/bin/python manage.py migrate
 $PROJECT_BASE_PATH/env/bin/python manage.py collectstatic --noinput
 
 # Configure supervisor
-cp $PROJECT_BASE_PATH/deploy/supervisor_profiles_api.conf /etc/supervisor/conf.d/profiles_api.conf
+cp $PROJECT_BASE_PATH/deploy/supervisor_billboard_api.conf /etc/supervisor/conf.d/billboard_api.conf
 supervisorctl reread
 supervisorctl update
-supervisorctl restart profiles_api
+supervisorctl restart billboard_api
 
 # Configure nginx
-cp $PROJECT_BASE_PATH/deploy/nginx_profiles_api.conf /etc/nginx/sites-available/profiles_api.conf
+cp $PROJECT_BASE_PATH/deploy/nginx_billboard_api.conf /etc/nginx/sites-available/billboard_api.conf
 rm /etc/nginx/sites-enabled/default
-ln -s /etc/nginx/sites-available/profiles_api.conf /etc/nginx/sites-enabled/profiles_api.conf
+ln -s /etc/nginx/sites-available/billboard_api.conf /etc/nginx/sites-enabled/billboard_api.conf
 systemctl restart nginx.service
 
 echo "DONE! :)"

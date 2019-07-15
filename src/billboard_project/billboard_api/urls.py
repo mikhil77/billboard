@@ -6,5 +6,6 @@ from . import views
 urlpatterns = [
 
      url(r'^user-view/', views.UserProfileView.as_view()),
+    
 
 ]
